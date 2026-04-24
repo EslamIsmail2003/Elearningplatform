@@ -32,4 +32,17 @@ public class EnrollmentService {
     public Enrollment addEnrollment(Enrollment enrollment){
         return enrollmentRepo.save(enrollment);
     }
+    public Optional<Enrollment> updateEnrollment(String id, Enrollment updatedValues){
+        Optional<Enrollment> updated = enrollmentRepo.findById(id);
+        if (updated.isPresent()){
+            Enrollment enrollment = updated.get();
+            enrollment.setCourse(updatedValues.getCourse());
+            enrollment.setStatus(updatedValues.getStatus());
+            enrollment.setStudent(updatedValues.getStudent());
+            enrollment.setPaymentStatus(updatedValues.getPaymentStatus());
+            enrollment.setTransactionId(updatedValues.getTransactionId());
+            return Optional.of(enrollmentRepo.save(enrollment));
+        }
+        return Optional.empty();
+    }
 }

@@ -48,7 +48,7 @@ public class StudentController {
     public ResponseEntity<Student> insertStudent(@RequestBody Student updatedValue,@PathVariable String id){
         Optional<Student> updated = studentService.updateStudent(id,updatedValue);
         if (updated.isPresent()){
-            return ResponseEntity.status(HttpStatus.OK).body(updatedValue);
+            return ResponseEntity.status(HttpStatus.OK).body(updated.get());
         }
        return ResponseEntity.notFound().build();
     }

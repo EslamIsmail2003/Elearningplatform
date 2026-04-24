@@ -30,5 +30,19 @@ public class InstructorService {
     public Optional<Instructor> getInstructorById(String id){
         return instructorRepo.findById(id);
     }
+    public Optional<Instructor> updateInstructor(String id, Instructor updatedValues){
+        Optional<Instructor> updated = instructorRepo.findById(id);
+        if (updated.isPresent()){
+            Instructor instructor = updated.get();
+            instructor.setCountry(updatedValues.getCountry());
+            instructor.setPhone(updatedValues.getPhone());
+            instructor.setEmail(updatedValues.getEmail());
+            instructor.setFirstName(updatedValues.getFirstName());
+            instructor.setLastName(updatedValues.getLastName());
+            instructor.setScope(updatedValues.getScope());
+            return Optional.of(instructorRepo.save(instructor));
+        }
+        return Optional.empty();
+    }
 
 }

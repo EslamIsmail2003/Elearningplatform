@@ -43,4 +43,12 @@ public class PaymentController {
        }
         return ResponseEntity.notFound().build();
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<Payment> updatePayment(@RequestBody Payment updatedValue, @PathVariable String id){
+        Optional<Payment> updated = paymentService.updatePayment(id, updatedValue);
+        if (updated.isPresent()){
+            return ResponseEntity.status(HttpStatus.OK).body(updated.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

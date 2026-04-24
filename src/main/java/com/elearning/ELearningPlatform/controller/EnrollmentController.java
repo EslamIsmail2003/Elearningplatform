@@ -47,4 +47,12 @@ public class EnrollmentController {
         }
         return ResponseEntity.notFound().build();
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<Enrollment> updateEnrollment(@RequestBody Enrollment updatedValue, @PathVariable String id){
+        Optional<Enrollment> updated = enrollmentService.updateEnrollment(id, updatedValue);
+        if (updated.isPresent()){
+            return ResponseEntity.status(HttpStatus.OK).body(updated.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

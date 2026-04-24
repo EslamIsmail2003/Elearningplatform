@@ -44,4 +44,12 @@ public class InstructorController {
         }
         return ResponseEntity.notFound().build();
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<Instructor> updateInstructor(@RequestBody Instructor updatedValue, @PathVariable String id){
+        Optional<Instructor> updated=  instructorService.updateInstructor(id, updatedValue);
+        if (updated.isPresent()){
+            return ResponseEntity.status(HttpStatus.OK).body(updated.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

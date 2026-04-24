@@ -32,5 +32,17 @@ public class PaymentService {
     public boolean existsById(String id){
         return paymentRepo.existsById(id);
     }
+    public Optional<Payment> updatePayment(String id, Payment updatedValues){
+        Optional<Payment> updated = paymentRepo.findById(id);
+        if (updated.isPresent()){
+            Payment payment = updated.get();
+            payment.setPaymentType(updatedValues.getPaymentType());
+            payment.setTransactionId(updatedValues.getTransactionId());
+            payment.setAmount(updatedValues.getAmount());
+            payment.setStatus(updatedValues.getStatus());
+            return Optional.of(paymentRepo.save(payment));
+        }
+        return Optional.empty();
+    }
 }
 
