@@ -1,6 +1,7 @@
 package com.elearning.ELearningPlatform.Course;
 
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class CourseController {
     }
 
     @PostMapping
-    public ResponseEntity<CourseResponseDTO> addCourse(@RequestBody CourseRequestDTO request) {
+    public ResponseEntity<CourseResponseDTO> addCourse(@Valid @RequestBody CourseRequestDTO request) {
         CourseResponseDTO saved = courseService.addCourse(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
@@ -64,7 +65,7 @@ public class CourseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CourseResponseDTO> updateCourse(@RequestBody CourseRequestDTO updatedValues, @PathVariable String id) {
+    public ResponseEntity<CourseResponseDTO> updateCourse(@Valid @RequestBody CourseRequestDTO updatedValues, @PathVariable String id) {
         Optional<CourseResponseDTO> updated = courseService.updateCourseById(id, updatedValues);
         if (updated.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(updated.get());

@@ -1,6 +1,7 @@
 package com.elearning.ELearningPlatform.Student;
 
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class StudentController {
        return ResponseEntity.status(HttpStatus.OK).body(students);
     }
     @PostMapping
-    public ResponseEntity<StudentResponseDTO> addStudent(@RequestBody StudentRequestDTO student){
+    public ResponseEntity<StudentResponseDTO> addStudent(@Valid @RequestBody StudentRequestDTO student){
         StudentResponseDTO saved = studentService.addStudent(student);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
@@ -43,7 +44,7 @@ public class StudentController {
         return ResponseEntity.notFound().build();
     }
     @PutMapping("/{id}")
-    public ResponseEntity<StudentResponseDTO> updateStudent(@RequestBody StudentRequestDTO updatedValue,@PathVariable String id){
+    public ResponseEntity<StudentResponseDTO> updateStudent(@Valid @RequestBody StudentRequestDTO updatedValue,@PathVariable String id){
         Optional<StudentResponseDTO> updated = studentService.updateStudent(id,updatedValue);
         if (updated.isPresent()){
             return ResponseEntity.status(HttpStatus.OK).body(updated.get());

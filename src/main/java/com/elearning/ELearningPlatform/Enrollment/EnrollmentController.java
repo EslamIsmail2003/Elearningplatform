@@ -1,5 +1,6 @@
 package com.elearning.ELearningPlatform.Enrollment;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class EnrollmentController {
     }
 
     @PostMapping
-    public ResponseEntity<EnrollmentResponseDTO> addEnrollment(@RequestBody EnrollmentRequestDTO request) {
+    public ResponseEntity<EnrollmentResponseDTO> addEnrollment(@Valid @RequestBody EnrollmentRequestDTO request) {
         EnrollmentResponseDTO saved = enrollmentService.addEnrollment(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
@@ -50,7 +51,7 @@ public class EnrollmentController {
         return ResponseEntity.notFound().build();
     }
     @PutMapping("/{id}")
-    public ResponseEntity<EnrollmentResponseDTO> updateEnrollment(@RequestBody EnrollmentRequestDTO updatedValue, @PathVariable String id){
+    public ResponseEntity<EnrollmentResponseDTO> updateEnrollment(@Valid @RequestBody EnrollmentRequestDTO updatedValue, @PathVariable String id){
         Optional<EnrollmentResponseDTO> updated = enrollmentService.updateEnrollment(id, updatedValue);
         if (updated.isPresent()){
             return ResponseEntity.status(HttpStatus.OK).body(updated.get());

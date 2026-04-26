@@ -1,6 +1,7 @@
 package com.elearning.ELearningPlatform.Payment;
 
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
     @PostMapping
-    public ResponseEntity<PaymentResponseDTO> addPayment(@RequestBody PaymentRequestDTO payment){
+    public ResponseEntity<PaymentResponseDTO> addPayment(@Valid @RequestBody PaymentRequestDTO payment){
         PaymentResponseDTO saved = paymentService.addPayment(payment);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
@@ -42,7 +43,7 @@ public class PaymentController {
         return ResponseEntity.notFound().build();
     }
     @PutMapping("/{id}")
-    public ResponseEntity<PaymentResponseDTO> updatePayment(@RequestBody PaymentRequestDTO updatedValue, @PathVariable String id){
+    public ResponseEntity<PaymentResponseDTO> updatePayment(@Valid @RequestBody PaymentRequestDTO updatedValue, @PathVariable String id){
         Optional<PaymentResponseDTO> updated = paymentService.updatePayment(id, updatedValue);
         if (updated.isPresent()){
             return ResponseEntity.status(HttpStatus.OK).body(updated.get());

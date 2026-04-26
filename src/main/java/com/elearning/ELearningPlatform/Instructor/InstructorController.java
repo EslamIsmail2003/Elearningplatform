@@ -1,6 +1,7 @@
 package com.elearning.ELearningPlatform.Instructor;
 
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class InstructorController {
         this.instructorService = instructorService;
     }
     @PostMapping
-    public ResponseEntity<InstructorResponseDTO> addInstructor(@RequestBody InstructorRequestDTO request){
+    public ResponseEntity<InstructorResponseDTO> addInstructor(@Valid @RequestBody InstructorRequestDTO request){
         InstructorResponseDTO saved = instructorService.addInstructor(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
@@ -43,7 +44,7 @@ public class InstructorController {
         return ResponseEntity.notFound().build();
     }
     @PutMapping("/{id}")
-    public ResponseEntity<InstructorResponseDTO> updateInstructor(@RequestBody InstructorRequestDTO updatedValue, @PathVariable String id){
+    public ResponseEntity<InstructorResponseDTO> updateInstructor(@Valid @RequestBody InstructorRequestDTO updatedValue, @PathVariable String id){
         Optional<InstructorResponseDTO> updated=  instructorService.updateInstructor(id, updatedValue);
         if (updated.isPresent()){
             return ResponseEntity.status(HttpStatus.OK).body(updated.get());
