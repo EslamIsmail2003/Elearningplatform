@@ -52,6 +52,16 @@ public class CourseController {
         List<CourseResponseDTO> response = courseService.getCourseByStatus(status);
             return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<CourseResponseDTO>> getCourseByCategory(@PathVariable String category){
+        List<CourseResponseDTO> response = courseService.getCourseByCategory(category);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+    @GetMapping("/instructor/{instructorId}")
+    public ResponseEntity<List<CourseResponseDTO>> getCourseByInstructorId(@PathVariable String instructorId){
+        List<CourseResponseDTO> response = courseService.getCourseByInstructorId(instructorId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<CourseResponseDTO> updateCourse(@RequestBody CourseRequestDTO updatedValues, @PathVariable String id) {

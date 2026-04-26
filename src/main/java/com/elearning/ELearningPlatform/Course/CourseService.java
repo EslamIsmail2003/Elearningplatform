@@ -73,7 +73,25 @@ public class CourseService {
         }
         return dto;
     }
+    public List<CourseResponseDTO> getCourseByCategory(String category){
+        List<Course> courses = courseRepo.findByCategory(category);
+        List<CourseResponseDTO> response = new ArrayList<>();
+        for (Course course : courses){
+            CourseResponseDTO dto = mapToDTO(course);
+            response.add(dto);
+        }
+        return response;
+    }
 
+    public List<CourseResponseDTO> getCourseByInstructorId(String instructorId){
+        List<Course> courses = courseRepo.findByInstructorId(instructorId);
+        List<CourseResponseDTO> response = new ArrayList<>();
+        for (Course course : courses){
+            CourseResponseDTO dto = mapToDTO(course);
+            response.add(dto);
+        }
+        return response;
+    }
     private static CourseResponseDTO mapToDTO(Course course){
         return new CourseResponseDTO(
                 course.getId(),

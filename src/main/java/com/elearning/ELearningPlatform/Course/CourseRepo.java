@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface CourseRepo extends JpaRepository<Course, String> {
     List<Course> findByStatus(CourseStatus status);
+    List<Course> findByCategory(String category);
+    List<Course> findByInstructorId(String instructorId);
 }

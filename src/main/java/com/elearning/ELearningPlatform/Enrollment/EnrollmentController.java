@@ -36,7 +36,11 @@ public class EnrollmentController {
         }
         return ResponseEntity.notFound().build();
     }
-
+    @GetMapping("/student/{studentId}")
+    public ResponseEntity<List<EnrollmentResponseDTO>> getEnrollmentByStudentId(@PathVariable String studentId){
+        List<EnrollmentResponseDTO> response = enrollmentService.findEnrollmentByStudentId(studentId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEnrollmentById(@PathVariable String id) {
         if (enrollmentService.existsById(id)){

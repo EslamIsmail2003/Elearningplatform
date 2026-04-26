@@ -49,4 +49,14 @@ public class PaymentController {
         }
         return ResponseEntity.notFound().build();
     }
+    @GetMapping("/student/{studentId}")
+    public ResponseEntity<List<PaymentResponseDTO>> getPaymentByStudentId(@PathVariable String studentId){
+        List<PaymentResponseDTO> response = paymentService.getPaymentByStudentId(studentId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<PaymentResponseDTO>> getPaymentsByStatus(@PathVariable String status){
+        List<PaymentResponseDTO> response = paymentService.getPaymentsByStatus(status);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }

@@ -63,6 +63,16 @@ public class EnrollmentService {
         return Optional.empty();
     }
 
+    public List<EnrollmentResponseDTO> findEnrollmentByStudentId(String studentId){
+        List<Enrollment> enrollments = enrollmentRepo.findEnrollmentByStudentId(studentId);
+        List<EnrollmentResponseDTO> response = new ArrayList<>();
+        for (Enrollment enrollment : enrollments){
+            EnrollmentResponseDTO dto = mapToDTO(enrollment);
+            response.add(dto);
+        }
+        return response;
+    }
+
     public Enrollment mapToEntity(EnrollmentRequestDTO request){
         Student student = studentRepo.findById(request.getStudentId()).orElseThrow(()-> new RuntimeException("Student not found! " + request.getStudentId()));
         Course course = courseRepo.findById(request.getCourseId()).orElseThrow(()-> new RuntimeException("Course not found! "+ request.getCourseId()));

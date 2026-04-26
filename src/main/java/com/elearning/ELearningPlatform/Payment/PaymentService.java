@@ -63,7 +63,25 @@ public class PaymentService {
         return Optional.empty();
     }
 
+    public List<PaymentResponseDTO> getPaymentByStudentId(String studentId){
+        List<Payment> payments = paymentRepo.findByStudentId(studentId);
+        List<PaymentResponseDTO> response = new ArrayList<>();
+        for (Payment payment : payments){
+            PaymentResponseDTO dto = mapToDTO(payment);
+            response.add(dto);
+        }
+        return response;
+    }
 
+    public List<PaymentResponseDTO> getPaymentsByStatus(String status){
+        List<Payment> payments = paymentRepo.findByStatus(PaymentStatus.valueOf(status));
+        List<PaymentResponseDTO> response = new ArrayList<>();
+        for (Payment payment : payments){
+            PaymentResponseDTO dto = mapToDTO(payment);
+            response.add(dto);
+        }
+        return response;
+    }
     private static PaymentResponseDTO mapToDTO(Payment payment) {
         return new PaymentResponseDTO(
                 payment.getTransactionId(),
