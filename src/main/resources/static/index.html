@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>E-Learning Platform</title>
+</head>
+<body>
+    <h1>Available Courses</h1>
+    <div id="courses"></div>
+    <h2>Enroll in a Course</h2>
+<input id="studentId" placeholder="Student ID" />
+<input id="courseId" placeholder="Course ID" />
+<button onclick="enroll()">Enroll</button>
+
+<script>
+function enroll() {
+    const studentId = document.getElementById('studentId').value;
+    const courseId = document.getElementById('courseId').value;
+    
+    fetch('http://localhost:8080/api/enrollments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            studentId: studentId,
+            courseId: courseId,
+            status: 'ACTIVE',
+            paymentStatus: 'PENDING',
+            transactionId: 'TXN' + Date.now()
+        })
+    })
+    .then(res => res.json())
+    .then(data => alert('Enrolled successfully!'))
+    .catch(err => alert('Error: ' + err));
+}
+</script>
+
+    <script>
+        fetch('http://localhost:8080/api/courses')
+            .then(response => response.json())
+            .then(courses => {
+                const container = document.getElementById('courses');
+                courses.forEach(course => {
+                    container.innerHTML += `
+                        <div>
+                            <h3>${course.courseName}</h3>
+                            <p>Instructor: ${course.instructorName}</p>
+                            <p>Price: $${course.price}</p>
+                            <p>Status: ${course.status}</p>
+                        </div>
+                    `;
+                });
+            });
+    </script>
+</body>
+</html>
