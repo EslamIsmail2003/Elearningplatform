@@ -1,6 +1,7 @@
 package com.elearning.ELearningPlatform.Student;
 
 
+import com.elearning.ELearningPlatform.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,6 +37,8 @@ public class StudentService {
         if (existing.isPresent()) {
             Student student = existing.get();
             return Optional.of(mapToDTO(student));
+        } else if (existing.isEmpty()) {
+            throw new ResourceNotFoundException("Student not found! " + id);
         }
         return Optional.empty();
     }
@@ -48,11 +51,11 @@ public class StudentService {
         return studentRepo.existsById(id);
     }
 
-    public Optional<StudentResponseDTO> getStudentByEmail(String email){
+    public Optional<StudentResponseDTO> getStudentByEmail(String email) {
         Optional<Student> existing = studentRepo.findByEmail(email);
-        if (existing.isPresent()){
+        if (existing.isPresent()) {
             Student student = existing.get();
-           return Optional.of(mapToDTO(student));
+            return Optional.of(mapToDTO(student));
         }
         return Optional.empty();
     }

@@ -6,6 +6,7 @@ import com.elearning.ELearningPlatform.Course.CourseRepo;
 import com.elearning.ELearningPlatform.Payment.PaymentStatus;
 import com.elearning.ELearningPlatform.Student.Student;
 import com.elearning.ELearningPlatform.Student.StudentRepo;
+import com.elearning.ELearningPlatform.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -48,6 +49,8 @@ public class EnrollmentService {
         if (existing.isPresent()){
             Enrollment enrollment = existing.get();
             return Optional.of(mapToDTO(enrollment));
+        }else if (existing.isEmpty()){
+            throw new ResourceNotFoundException("Enrollment not found! " + id);
         }
         return Optional.empty();
     }
@@ -74,8 +77,8 @@ public class EnrollmentService {
     }
 
     public Enrollment mapToEntity(EnrollmentRequestDTO request){
-        Student student = studentRepo.findById(request.getStudentId()).orElseThrow(()-> new RuntimeException("Student not found! " + request.getStudentId()));
-        Course course = courseRepo.findById(request.getCourseId()).orElseThrow(()-> new RuntimeException("Course not found! "+ request.getCourseId()));
+        Student student = studentRepo.findById(request.getStudentId()).orElseThrow(()-> new ResourceNotFoundException("Student not found! " + request.getStudentId()));
+        Course course = courseRepo.findById(request.getCourseId()).orElseThrow(()-> new ResourceNotFoundException("Course not found! "+ request.getCourseId()));
         Enrollment enrollment = new Enrollment();
         enrollment.setStudent(student);
         enrollment.setCourse(course);
@@ -94,8 +97,8 @@ public class EnrollmentService {
                 enrollment.getPaymentStatus().name());
     }
     public void updateEnrollmentFields(Enrollment enrollment, EnrollmentRequestDTO request){
-        Student student = studentRepo.findById(request.getStudentId()).orElseThrow(() -> new RuntimeException("Student not found! " + request.getStudentId()));
-        Course course = courseRepo.findById(request.getCourseId()).orElseThrow(()-> new RuntimeException("Course not found! " + request.getCourseId()));
+        Student student = studentRepo.findById(request.getStudentId()).orElseThrow(() -> new ResourceNotFoundException("Student not found! " + request.getStudentId()));
+        Course course = courseRepo.findById(request.getCourseId()).orElseThrow(()-> new ResourceNotFoundException("Course not found! " + request.getCourseId()));
         enrollment.setStatus(EnrollmentStatus.valueOf(request.getStatus()));
         enrollment.setStudent(student);
         enrollment.setCourse(course);

@@ -3,6 +3,7 @@ package com.elearning.ELearningPlatform.Payment;
 
 import com.elearning.ELearningPlatform.Student.Student;
 import com.elearning.ELearningPlatform.Student.StudentRepo;
+import com.elearning.ELearningPlatform.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -44,6 +45,8 @@ public class PaymentService {
         if (existing.isPresent()) {
             Payment payment = existing.get();
             return Optional.of(mapToDTO(payment));
+        }else if (existing.isEmpty()){
+            throw new ResourceNotFoundException("Payment not found! " + id);
         }
         return Optional.empty();
     }
@@ -92,7 +95,7 @@ public class PaymentService {
     }
 
     private  void updatePaymentFields(Payment payment, PaymentRequestDTO updatedValue) {
-        Student student = studentRepo.findById(updatedValue.getStudentId()).orElseThrow(() -> new RuntimeException("Student not found: " + updatedValue.getStudentId()));
+        Student student = studentRepo.findById(updatedValue.getStudentId()).orElseThrow(() -> new ResourceNotFoundException("Student not found: " + updatedValue.getStudentId()));
         payment.setStudent(student);
         payment.setAmount(updatedValue.getAmount());
         payment.setTransactionId(updatedValue.getTransactionId());
@@ -101,7 +104,7 @@ public class PaymentService {
     }
 
     private Payment mapToEntity(PaymentRequestDTO request) {
-        Student student = studentRepo.findById(request.getStudentId()).orElseThrow(() -> new RuntimeException("Student not found with id: " + request.getStudentId()));
+        Student student = studentRepo.findById(request.getStudentId()).orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + request.getStudentId()));
         Payment payment = new Payment();
         payment.setStudent(student);
         payment.setTransactionId(request.getTransactionId());

@@ -4,8 +4,10 @@ package com.elearning.ELearningPlatform.Course;
 import com.elearning.ELearningPlatform.Instructor.Instructor;
 import com.elearning.ELearningPlatform.Instructor.InstructorRepo;
 import com.elearning.ELearningPlatform.Instructor.InstructorResponseDTO;
+import com.elearning.ELearningPlatform.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.management.RuntimeErrorException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -51,6 +53,8 @@ public class CourseService {
         if (existing.isPresent()){
             Course course = existing.get();
             return Optional.of(mapToDTO(course));
+        }else if (existing.isEmpty()){
+            throw new ResourceNotFoundException("Course not found! " + id);
         }
         return Optional.empty();
     }
@@ -85,6 +89,9 @@ public class CourseService {
 
     public List<CourseResponseDTO> getCourseByInstructorId(String instructorId){
         List<Course> courses = courseRepo.findByInstructorId(instructorId);
+        if (courses.isEmpty()){
+            return new ArrayList<>();
+        }
         List<CourseResponseDTO> response = new ArrayList<>();
         for (Course course : courses){
             CourseResponseDTO dto = mapToDTO(course);
@@ -105,7 +112,7 @@ public class CourseService {
     }
 
     public Course mapToEntity(CourseRequestDTO request){
-        Instructor instructor = instructorRepo.findById(request.getInstructorId()).orElseThrow(() -> new RuntimeException("Instructor not found! " + request.getInstructorId()));
+        Instructor instructor = instructorRepo.findById(request.getInstructorId()).orElseThrow(() -> new ResourceNotFoundException("Instructor not found! " + request.getInstructorId()));
         Course course = new Course();
         course.setCourseName(request.getCourseName());
         course.setStatus(CourseStatus.valueOf(request.getStatus()));
@@ -118,7 +125,7 @@ public class CourseService {
 
 
     private  void updateCourseFields(CourseRequestDTO updatedValues, Course course){
-        Instructor instructor = instructorRepo.findById(updatedValues.getInstructorId()).orElseThrow(() -> new RuntimeException("Instructor not found! " + updatedValues.getInstructorId()));
+        Instructor instructor = instructorRepo.findById(updatedValues.getInstructorId()).orElseThrow(() -> new ResourceNotFoundException("Instructor not found! " + updatedValues.getInstructorId()));
         course.setCourseName(updatedValues.getCourseName());
         course.setStatus(CourseStatus.valueOf(updatedValues.getStatus()));
         course.setCategory(updatedValues.getCategory());

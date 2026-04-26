@@ -1,6 +1,7 @@
 package com.elearning.ELearningPlatform.Instructor;
 
 
+import com.elearning.ELearningPlatform.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -44,6 +45,8 @@ public class InstructorService {
         if (existing.isPresent()) {
             Instructor instructor = existing.get();
             return Optional.of(mapToDTO(instructor));
+        }else if (existing.isEmpty()){
+            throw new ResourceNotFoundException("Instructor not found! " + id);
         }
         return Optional.empty();
     }
